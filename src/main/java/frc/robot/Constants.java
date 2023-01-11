@@ -16,10 +16,37 @@ public interface Constants
 {
   interface PWM
   {
-    int motorLeftFrontPort = 0;
-    int motorLeftRearPort = 3;
-    int motorRightFrontPort = 1;
-    int motorRightRearPort = 2;
+    int winchIntake = 0;
+    int intakeLeft = 1;
+    int intakeRight = 2;
+    int winchElevator = 3;
+    int telescopicElevator = 4;
   }
-  
+
+  interface CAN
+  {
+    int motorLeftFrontPort = 1;
+    int motorLeftRearPort = 2;
+    int motorRightFrontPort = 3;
+    int motorRightRearPort = 4;
+  }
+ 
+  interface Elevator
+  {
+    double speed = 0.7;
+  }
+
+  interface TelescopicElevator
+  {
+    double speed = 0.4;
+  }
+
+  interface Intake
+  {
+    double winchRaiseSpeed = 1;
+    double winchLowerSpeed = -1;
+    double feedSpeed = 0.7;
+    double ejectSpeed= 0.7;
+  }
+
 }

@@ -7,35 +7,48 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+// import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANEncoder;
+
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
 public class DriveTrain extends SubsystemBase
  {
-  private final Talon motorLeftFront = new Talon(Constants.PWM.motorLeftFrontPort);
-  private final Talon motorLeftRear = new Talon(Constants.PWM.motorLeftRearPort);
-  private final Talon motorRightFront = new Talon(Constants.PWM.motorRightFrontPort);
-  private final Talon motorRightRear = new Talon(Constants.PWM.motorRightRearPort);
+  private final CANSparkMax motorLeftFront = new CANSparkMax(Constants.CAN.motorLeftFrontPort, MotorType.kBrushed);
+  private final CANSparkMax motorLeftRear = new CANSparkMax(Constants.CAN.motorLeftRearPort, MotorType.kBrushed);
+  private final CANSparkMax motorRightFront = new CANSparkMax(Constants.CAN.motorRightFrontPort, MotorType.kBrushed);
+  private final CANSparkMax motorRightRear = new CANSparkMax(Constants.CAN.motorRightRearPort, MotorType.kBrushed);
 
-  private final MotorController m_leftMotor = new MotorControllerGroup(motorLeftFront, motorLeftRear);
-  private final MotorController m_rightMotor = new MotorControllerGroup(motorRightFront, motorRightRear);
+  private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(motorLeftFront, motorLeftRear);
+  private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(motorRightFront, motorRightRear);
 
-  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
+
+  private boolean slowMode = false;
 
   /** Creates a new DriveBase. */
   public DriveTrain() 
   {
     super();
 
-    m_leftMotor.setInverted(true);
+    m_rightMotors.setInverted(true);
+  }
+
+  public void toggleSlowMode(){
+    slowMode = !slowMode;
+    System.out.printf("Slow mode toggled, current state: %b", slowMode);
   }
 
   public void driveTank(double speedLeft, double speedRight)
@@ -57,6 +70,11 @@ public class DriveTrain extends SubsystemBase
 
     motorRightFront.set(speedRight);
     motorRightRear.set(speedRight);*/
+  }
+
+  public void driveArcade(double move, double rotate)
+  {
+    m_drive.arcadeDrive(move, rotate, true);
   }
 
   @Override
